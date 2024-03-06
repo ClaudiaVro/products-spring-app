@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Home</title>
+</head>
+<body>
+<h2>Welcome Home!</h2>
+
+<div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/user/login}">Login</a> <a
+        th:href="@{/user/registration}">Registration</a>
+</div>
+
+<br>
+<a th:href="@{/h2-console}">H2-Console</a>
+
+<br>
+<div sec:authorize="isAuthenticated()">This content is only shown
+    to authenticated users.
+</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">This content is only
+    shown to administrators.
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">This content is only
+    shown to users.
+</div>
+<div sec:authorize="isAuthenticated()">
+    <a style="margin-right: 10px" th:href="@{/products}">Products</a> <a
+        th:href="@{/products/history}">Products Purchase History</a> <br>
+    <hr>
+    <a href="#" onclick="document.getElementById('logout-form').submit();"> Logout </a>
+
+    <form id="logout-form" th:action="@{/logout}" method="post" enctype="utf8">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
+</div>
+
+</body>
+</html>
