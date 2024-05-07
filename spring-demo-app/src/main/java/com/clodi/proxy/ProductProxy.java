@@ -1,10 +1,14 @@
 package com.clodi.proxy;
 
-import com.clodi.config.Config;
+import java.util.List;
+import java.util.Optional;
+
+import com.clodi.config.SecurityConfig;
 import com.clodi.dto.ProductDTO;
-import com.clodi.dto.ProductReceipt;
-import com.clodi.dto.Sale;
+import com.clodi.dto.ProductReceiptDTO;
 import com.clodi.model.Product;
+import com.clodi.model.ProductReceipt;
+import com.clodi.model.Sale;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,31 +22,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+@FeignClient(name = "product", url = "${name.product.url}", configuration = SecurityConfig.class) public interface ProductProxy {
 
-@FeignClient(name = "product", url = "${name.product.url}", configuration = Config.class)
-public interface ProductProxy {
+    @GetMapping("/products") List<Product> getAllProducts();
 
-    @GetMapping("/products")
-    List<Product> getAllProducts();
+    @GetMapping("products/{id}") Optional<Product> getProduct(@PathVariable Long id);
 
-    @GetMapping("products/{id}")
-    Optional<Product> getProduct(@PathVariable Long id);
+    @GetMapping("/receipts/{customerName}") List<ProductReceipt> getProductHistory(@RequestHeader String customerName);
 
-    @GetMapping("/receipts/{customerName}")
-    List<ProductReceipt> getProductHistory(@RequestHeader String customerName);
+    @PostMapping("/receipts/addReceipt") ResponseEntity<ProductReceipt> addReceipt(ProductReceiptDTO productReceipt);
 
-    @GetMapping("/sales")
-    List<Sale> getAllSales();
+    @GetMapping("/sales") List<Sale> getAllSales();
 
-    @PostMapping(path = "/products")
-    ResponseEntity<Product> addProduct(ProductDTO product);
+    @PostMapping(path = "/products") ResponseEntity<Product> addProduct(ProductDTO product);
 
-    @PostMapping(path = "/products/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    void uploadImageFile(@RequestParam Long id, @RequestPart(value = "file") MultipartFile file);
+    @PostMapping(path = "/products/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) void uploadImageFile(
+                    @RequestParam Long id, @RequestPart(value = "file") MultipartFile file);
 
-    @PutMapping("/products")
-    Optional<ProductDTO> updateProduct(@RequestBody ProductDTO newProduct);
+    @PutMapping("/products") Optional<ProductDTO> updateProduct(@RequestBody ProductDTO newProduct);
 
 }

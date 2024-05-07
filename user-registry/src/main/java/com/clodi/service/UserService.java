@@ -1,5 +1,8 @@
 package com.clodi.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.clodi.dao.SimpleUserRepository;
 import com.clodi.dao.TokenRepository;
 import com.clodi.dto.SimpleUserDTO;
@@ -7,32 +10,20 @@ import com.clodi.entity.SimpleRole;
 import com.clodi.entity.SimpleUser;
 import com.clodi.entity.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+@Service @Transactional public class UserService implements IUserService {
 
-@Service
-@Transactional
-public class UserService implements IUserService {
+    @Autowired private SimpleUserRepository userRepository;
+    @Autowired private TokenRepository tokenRepository;
+    @Autowired private PasswordEncoder encoder;
 
-    @Autowired
-    private SimpleUserRepository userRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
-
-//    @Autowired
-//    private PasswordEncoder encoder;
-
-    @Override
-    public SimpleUser registerNewUserAccount(SimpleUserDTO userDTO) {
+    @Override public SimpleUser registerNewUserAccount(SimpleUserDTO userDTO) {
         SimpleUser user = new SimpleUser();
         user.setEnabled(false);
-//        user.setPassword(encoder.encode(userDTO.getPassword()));
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(encoder.encode(userDTO.getPassword()));
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
 
@@ -42,19 +33,16 @@ public class UserService implements IUserService {
 
     }
 
-    @Override
-    public void createVerificationToken(SimpleUser user, String tokenStr) {
+    @Override public void createVerificationToken(SimpleUser user, String tokenStr) {
         VerificationToken token = new VerificationToken(tokenStr, user);
         tokenRepository.save(token);
     }
 
-    @Override
-    public VerificationToken getVerificationToken(String verificationToken) {
+    @Override public VerificationToken getVerificationToken(String verificationToken) {
         return tokenRepository.findByToken(verificationToken);
     }
 
-    @Override
-    public void enableRegisteredUser(SimpleUser user) {
+    @Override public void enableRegisteredUser(SimpleUser user) {
         userRepository.save(user);
     }
 
@@ -62,8 +50,7 @@ public class UserService implements IUserService {
         return userRepository.findByUsername(username);
     }
 
-    @Override
-    public Optional<SimpleUser> findUserById(Long id) {
+    @Override public Optional<SimpleUser> findUserById(Long id) {
         return userRepository.findById(id);
     }
 

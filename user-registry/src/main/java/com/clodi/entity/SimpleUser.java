@@ -14,84 +14,71 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@SuppressWarnings("serial")
-@Entity
-@Table(name = "users")
-public class SimpleUser implements Serializable {
+@Entity @Table(name = "users") public class SimpleUser implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @Column(unique = true, nullable = false) private String username;
+    private String password;
+    private boolean enabled;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER) @ElementCollection private List<SimpleRole> roles;
+    private String email;
 
-	@Column(unique = true, nullable = false)
-	private String username;
+    public SimpleUser() {
+    }
 
-	private String password;
+    public SimpleUser(String username, String password, boolean enabled, String email) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.email = email;
+    }
 
-	private boolean enabled;
+    public String getUsername() {
+        return username;
+    }
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@ElementCollection
-	private List<SimpleRole> roles;
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	private String email;
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	public SimpleUser() {
-	}
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public SimpleUser(String username, String password, boolean enabled, String email) {
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-		this.email = email;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public List<SimpleRole> getRoles() {
+        return roles;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setRoles(List<SimpleRole> roles) {
+        this.roles = roles;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public List<SimpleRole> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<SimpleRole> roles) {
-		this.roles = roles;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

@@ -1,0 +1,42 @@
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 9000:9000
+    networks:
+      - spring-products-net
+    environment:
+      MYSQL_USER: clodi
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: products
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - spring-products-net
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: products
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  db-data:
+
+networks:
+  spring-products-net:

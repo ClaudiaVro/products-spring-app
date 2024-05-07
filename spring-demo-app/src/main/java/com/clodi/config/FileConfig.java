@@ -15,11 +15,9 @@ import org.springframework.web.client.RestTemplate;
 /**
  * @author Claudia Vidican
  */
-@Configuration
-public class FileConfig {
+@Configuration public class FileConfig {
 
-    @Bean
-    public MessageSource messageSource() {
+    @Bean public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:messages");
         messageSource.setUseCodeAsDefaultMessage(true);
@@ -28,11 +26,9 @@ public class FileConfig {
         return messageSource;
     }
 
-    @Bean
-    public Encoder multipartFormEncoder() {
+    @Bean public Encoder multipartFormEncoder() {
         return new SpringFormEncoder(new SpringEncoder(new ObjectFactory<HttpMessageConverters>() {
-            @Override
-            public HttpMessageConverters getObject() throws BeansException {
+            @Override public HttpMessageConverters getObject() throws BeansException {
                 return new HttpMessageConverters(new RestTemplate().getMessageConverters());
             }
         }));

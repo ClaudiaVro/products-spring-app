@@ -2,35 +2,38 @@ package com.clodi.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.clodi.model.ProductReceipt;
 import com.clodi.model.Sale;
 import com.clodi.repository.ReceiptRepository;
 import com.clodi.repository.SaleRepository;
+import org.springframework.stereotype.Service;
 
-@Service
-public class ReceiptService {
+@Service public class ReceiptService {
 
-	private final ReceiptRepository receiptRepository;
-	private final SaleRepository saleRepository;
+    private final ReceiptRepository receiptRepository;
+    private final SaleRepository saleRepository;
 
-	public ReceiptService(ReceiptRepository receiptRepository, SaleRepository saleRepository) {
-		this.receiptRepository = receiptRepository;
-		this.saleRepository = saleRepository;
-	}
+    public ReceiptService(ReceiptRepository receiptRepository, SaleRepository saleRepository) {
+        this.receiptRepository = receiptRepository;
+        this.saleRepository = saleRepository;
+    }
 
-	public List<ProductReceipt> getAllReceipts() {
-		List<ProductReceipt> findAll = receiptRepository.findAll();
-		return findAll;
-	}
+    public List<ProductReceipt> getAllReceipts() {
+        return receiptRepository.findAll();
+    }
 
-	public List<ProductReceipt> getReceiptsByCustomer(String name) {
-		return receiptRepository.findByCustomerName(name);
-	}
+    public List<ProductReceipt> getReceiptsByCustomer(String name) {
+        return receiptRepository.findByCustomerName(name);
+    }
 
-	public List<Sale> getSales() {
-		List<Sale> findAll = saleRepository.findAll();
-		return findAll;
-	}
+    public List<Sale> getSales() {
+        return saleRepository.findAll();
+    }
+
+    public ProductReceipt saveReceipt(ProductReceipt productReceipt) {
+        ProductReceipt savedProductReceipt = receiptRepository.save(productReceipt);
+        List<Sale> sales = savedProductReceipt.getSales();
+        saleRepository.saveAll(sales);
+        return savedProductReceipt;
+    }
 }

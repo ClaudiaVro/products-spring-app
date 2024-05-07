@@ -1,11 +1,14 @@
 package com.clodi.activation;
 
+import java.util.Locale;
 import java.util.Properties;
 import java.util.UUID;
 
 import com.clodi.entity.SimpleUser;
+import com.clodi.exception.EmailErrorException;
 import com.clodi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Component;
     @Autowired private UserService userService;
     @Autowired private MailSender mailSender;
     @Autowired private MessageSource messages;
+    @Value("${name.mainapp.url}") private String appName;
 
     @Override public void onApplicationEvent(OnRegistrationSuccessEvent event) {
         confirmRegistration(event);
@@ -36,23 +40,21 @@ import org.springframework.stereotype.Component;
         String url = "/user/confirmRegistration?token=" + token;
         String message;
         try {
-            message = messages.getMessage("message.registrationSuccessConfirmationLink", null, null);
+            message = messages.getMessage("message.registrationSuccessConfirmationLink", null, Locale.getDefault());
         }
         catch (Throwable thr) {
-            message = "Successful message";
+            message = "Attempted to retrieve message for Successful message";
         }
 
         SimpleMailMessage email = new SimpleMailMessage();
         try {
             email.setTo(recipient);
             email.setSubject(subject);
-            email.setText(message + " http://localhost:9090" + url);
+            email.setText(message + " " + appName + url);
             mailSender.send(email);
-            System.out.println("email sent to " + recipient);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println(email);
+            throw new EmailErrorException(ex.getMessage());
         }
     }
 

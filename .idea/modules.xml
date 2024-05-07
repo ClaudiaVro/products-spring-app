@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/authorization-endpoint/authorization-endpoint.iml" filepath="$PROJECT_DIR$/authorization-endpoint/authorization-endpoint.iml" />
       <module fileurl="file://$PROJECT_DIR$/user-registry/user-registry.iml" filepath="$PROJECT_DIR$/user-registry/user-registry.iml" />
     </modules>
   </component>

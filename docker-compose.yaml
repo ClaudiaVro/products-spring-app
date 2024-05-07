@@ -1,0 +1,79 @@
+services:
+  main-app:
+    image: clodi485/spring-products
+    build: ./spring-demo-app
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-products-net
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+
+  products-endpoint:
+    image: clodi485/products-endpoint
+    build: ./products-endpoint
+    ports:
+      - "9000:9000"
+    networks:
+      - spring-products-net
+    environment:
+      MYSQL_USER: clodi
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: products
+    depends_on:
+      mysql:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+
+  user-registry:
+    image: clodi485/user-registry
+    build: ./user-registry
+    ports:
+      - "9100:9100"
+    networks:
+      - spring-products-net
+    environment:
+      MYSQL_USER: clodi
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: products
+    depends_on:
+      mysql:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+  mysql:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    networks:
+      - spring-products-net
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: products
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
+
+networks:
+  spring-products-net:
+
+

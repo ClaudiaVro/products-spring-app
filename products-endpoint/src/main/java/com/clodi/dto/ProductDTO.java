@@ -2,21 +2,13 @@ package com.clodi.dto;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
-
 /**
  * @author Claudia Vidican
  */
 public class ProductDTO {
 
-    @NotEmpty
     private String name;
-
-    @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal price;
-
-    @NotEmpty
     private String imageStr;
 
     public ProductDTO() {

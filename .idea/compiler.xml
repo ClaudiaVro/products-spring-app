@@ -8,10 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="products-endpoint" />
         <module name="spring-demo-app" />
-        <module name="authorization-endpoint" />
         <module name="user-registry" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="authorization-endpoint" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

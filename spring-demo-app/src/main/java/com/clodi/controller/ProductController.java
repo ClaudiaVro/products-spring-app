@@ -1,17 +1,19 @@
 package com.clodi.controller;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
+
 import com.clodi.dto.ProductDTO;
-import com.clodi.dto.ProductReceipt;
 import com.clodi.exception.ImageNotFoundException;
 import com.clodi.exception.ProductNotFoundException;
 import com.clodi.model.Product;
+import com.clodi.model.ProductReceipt;
 import com.clodi.proxy.ProductProxy;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,12 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Logger;
-
-@Controller
-public class ProductController {
+@Controller public class ProductController {
 
     private static final Logger LOGGER = Logger.getLogger(ProductController.class.getName());
 
@@ -40,8 +37,7 @@ public class ProductController {
     /**
      * Display all products in db.
      */
-    @GetMapping("/products")
-    public String showProducts(Model model) {
+    @GetMapping("/products") public String showProducts(Model model) {
         LOGGER.info("Displaying products..");
         List<Product> products = productProxy.getAllProducts();
 
@@ -49,8 +45,7 @@ public class ProductController {
         return "products";
     }
 
-    @GetMapping("/products/{id}")
-    public String showProduct(@PathVariable Long id, Model model) {
+    @GetMapping("/products/{id}") public String showProduct(@PathVariable Long id, Model model) {
         LOGGER.info("Display product " + id);
         Optional<Product> productOpt = productProxy.getProduct(id);
         Product product = productOpt.orElseThrow(ProductNotFoundException::new);
@@ -62,9 +57,7 @@ public class ProductController {
     /**
      * Show a simulated history of purchases (receipts).
      */
-    @GetMapping("/products/history")
-    public String showProductsHistory(@RegisteredOAuth2AuthorizedClient("product-client-authorization-code")
-                                              OAuth2AuthorizedClient authorizedClient, Model model) {
+    @GetMapping("/products/history") public String getShowProductsHistory(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
 
@@ -75,14 +68,12 @@ public class ProductController {
         return "products-history";
     }
 
-    @GetMapping("/products/add")
-    public String addProductForm(Model model) {
+    @GetMapping("/products/add") public String getAddProductForm(Model model) {
         return "add-product-form";
     }
 
-    @PostMapping(path = "/products/add")
-    public String productSubmit(@ModelAttribute ProductDTO product,
-                                StandardMultipartHttpServletRequest request) {
+    @PostMapping(path = "/products/add") public String submitProduct(@ModelAttribute ProductDTO product,
+                                                                     StandardMultipartHttpServletRequest request) {
         MultipartFile productFile = request.getFile("image");
         if (productFile != null && productFile.getOriginalFilename() != null) {
             String originalFilename = productFile.getOriginalFilename();
@@ -91,17 +82,18 @@ public class ProductController {
             Product savedProduct = response.getBody();
             if (savedProduct != null) {
                 productProxy.uploadImageFile(savedProduct.getId(), productFile);
-            } else {
+            }
+            else {
                 throw new ImageNotFoundException();
             }
-        } else {
+        }
+        else {
             throw new ImageNotFoundException();
         }
         return "redirect:/products";
     }
 
-    @GetMapping("/products/{id}/edit")
-    public String editProductForm(Model model, @PathVariable Long id) {
+    @GetMapping("/products/{id}/edit") public String editProductForm(Model model, @PathVariable Long id) {
         Optional<Product> productOpt = productProxy.getProduct(id);
         Product product = productOpt.orElseThrow(ProductNotFoundException::new);
         ProductDTO productDTO = new ProductDTO();
@@ -116,9 +108,8 @@ public class ProductController {
     /**
      * Edit a product's name, price or image.
      */
-    @PostMapping(path = "/products/{id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String editProductSubmit(@ModelAttribute ProductDTO product, BindingResult bindingResult,
-                                    StandardMultipartHttpServletRequest request) {
+    @PostMapping(path = "/products/{id}/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) public String editProductSubmit(
+                    @ModelAttribute ProductDTO product, BindingResult bindingResult, StandardMultipartHttpServletRequest request) {
 
         if (product.getName() == null || product.getPrice() == null) {
             throw new IllegalStateException("Product name, price, id cannot be null.");

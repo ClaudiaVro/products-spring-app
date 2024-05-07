@@ -8,13 +8,13 @@ import com.clodi.entity.VerificationToken;
 
 public interface IUserService {
 
-	SimpleUser registerNewUserAccount(SimpleUserDTO userDTO);
+    SimpleUser registerNewUserAccount(SimpleUserDTO userDTO);
 
-	public void createVerificationToken(SimpleUser user, String token);
+    void createVerificationToken(SimpleUser user, String token);
 
-	public VerificationToken getVerificationToken(String verificationToken);
+    VerificationToken getVerificationToken(String verificationToken);
 
-	public void enableRegisteredUser(SimpleUser user);
+    void enableRegisteredUser(SimpleUser user);
 
-	Optional<SimpleUser> findUserById(Long id);
+    Optional<SimpleUser> findUserById(Long id);
 }

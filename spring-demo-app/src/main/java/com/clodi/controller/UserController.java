@@ -1,10 +1,8 @@
 package com.clodi.controller;
 
 import com.clodi.dto.SimpleUserDTO;
+import com.clodi.exception.UserNotFoundException;
 import com.clodi.proxy.UserProxy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller @RequestMapping("/user") public class UserController {
 
     private static final String FORM = "registration-form-simple";
-
     private final UserProxy userProxy;
-    @Autowired
-    private OAuth2AuthorizedClientService authorizedClientService;
 
     public UserController(UserProxy userProxy) {
         this.userProxy = userProxy;
@@ -49,8 +44,7 @@ import org.springframework.web.bind.annotation.RequestParam;
             return "redirect:/home";
         }
         else {
-            // in practice, we really shouldn't show the user that a username already
-            // exists
+            // in practice, we really shouldn't show the user that a username already exists
             model.addAttribute("user", new SimpleUserDTO());
             model.addAttribute("usernameExists", "Username already exists");
             return FORM;
@@ -62,9 +56,8 @@ import org.springframework.web.bind.annotation.RequestParam;
             return userProxy.confirmRegistration(token);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            throw new UserNotFoundException();
         }
-        return "error";
     }
 
 }

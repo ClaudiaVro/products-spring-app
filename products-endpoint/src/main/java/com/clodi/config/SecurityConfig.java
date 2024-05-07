@@ -1,25 +1,26 @@
 package com.clodi.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * @author Claudia Vidican
  */
-@EnableWebSecurity public class SecurityConfig {
+@Configuration public class SecurityConfig {
 
+    /*
+     * @formatter:off
+     */
     @Bean SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //        http.mvcMatcher("/receipts/**")
-        //                .authorizeRequests()
-        //                .mvcMatchers("/receipts/**")
-        //                .access("hasAuthority('SCOPE_history.read')")
-        //                .and()
-        //                .oauth2ResourceServer()
-        //                .jwt();
-        //        return http.build();
-
-        return http.authorizeHttpRequests(r -> r.requestMatchers("/receipts/**").authenticated()).build();
+        http.authorizeHttpRequests(r -> r
+                        .anyRequest().permitAll())
+                        .csrf(c -> c.disable());
+        return http.build();
     }
+    /*
+     * @formatter:on
+     */
+
 }

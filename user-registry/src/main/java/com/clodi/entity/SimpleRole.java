@@ -2,6 +2,7 @@ package com.clodi.entity;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,21 +12,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "roles")
-public class SimpleRole implements Serializable {
+@Entity @Table(name = "roles") public class SimpleRole implements Serializable {
 
     public static final String ADMIN = "ROLE_ADMIN";
     public static final String USER = "ROLE_USER";
 
-    @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Id @Column(unique = true, nullable = false) @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "username", referencedColumnName = "username")
-    private SimpleUser user;
+    @OneToOne @JoinColumn(name = "username", referencedColumnName = "username") @JsonIgnore private SimpleUser user;
     private String role;
 
     public SimpleRole() {

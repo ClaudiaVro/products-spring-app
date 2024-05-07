@@ -15,58 +15,48 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "receipt")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class ProductReceipt {
+@Entity @Table(name = "receipt") @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") public class ProductReceipt {
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Id
-	private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id private Long id;
 
-	@OneToMany(mappedBy = "productReceipt", fetch = FetchType.EAGER)
-	@JsonManagedReference
-	private List<Sale> sales;
+    @OneToMany(mappedBy = "productReceipt", fetch = FetchType.EAGER) @JsonManagedReference private List<Sale> sales;
 
-	@Column(name = "customer_name", nullable = false)
-	private String customerName;
+    @Column(name = "customer_name", nullable = false) private String customerName;
 
-	@Column(name = "date", nullable = false)
-	private LocalDateTime dateTime;
+    @Column(name = "date", nullable = false) private LocalDateTime dateTime;
 
-	public ProductReceipt() {
-	}
+    public ProductReceipt() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
 
-	public LocalDateTime getDateTime() {
-		return dateTime;
-	}
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
+    public List<Sale> getSales() {
+        return sales;
+    }
 
-	public List<Sale> getSale() {
-		return sales;
-	}
+    public void setSales(List<Sale> sale) {
+        this.sales = sale;
+    }
 
-	public void setSale(List<Sale> sale) {
-		this.sales = sale;
-	}
+    public String getCustomerName() {
+        return customerName;
+    }
 
-	public String getCustomerName() {
-		return customerName;
-	}
-
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 }

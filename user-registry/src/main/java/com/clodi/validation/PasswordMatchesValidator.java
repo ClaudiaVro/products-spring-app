@@ -6,26 +6,24 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 
-	private String message;
-	private String password;
+    private String message;
+    private String password;
 
-	@Override
-	public void initialize(final PasswordMatches constraintAnnotation) {
-		message = constraintAnnotation.message();
-		password = constraintAnnotation.password();
-	}
+    @Override public void initialize(final PasswordMatches constraintAnnotation) {
+        message = constraintAnnotation.message();
+        password = constraintAnnotation.password();
+    }
 
-	@Override
-	public boolean isValid(Object value, ConstraintValidatorContext context) {
-		SimpleUserDTO user = (SimpleUserDTO) value;
-		boolean equals = user.getPassword().equals(user.getMatchingPassword());
+    @Override public boolean isValid(Object value, ConstraintValidatorContext context) {
+        SimpleUserDTO user = (SimpleUserDTO) value;
+        boolean equals = user.getPassword().equals(user.getMatchingPassword());
 
-		if (!equals) {
-			context.buildConstraintViolationWithTemplate(message).addPropertyNode(password).addConstraintViolation()
-					.disableDefaultConstraintViolation();
-		}
+        if (!equals) {
+            context.buildConstraintViolationWithTemplate(message).addPropertyNode(password).addConstraintViolation()
+                            .disableDefaultConstraintViolation();
+        }
 
-		return equals;
-	}
+        return equals;
+    }
 
 }

@@ -3,7 +3,12 @@ package com.clodi.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
+import com.clodi.annotation.ProductAnalyticsLog;
 import com.clodi.dto.ProductDTO;
+import com.clodi.model.Product;
+import com.clodi.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,72 +26,53 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.clodi.annotation.ProductAnalyticsLog;
-import com.clodi.model.Product;
-import com.clodi.service.ProductService;
+@RestController public class ProductController {
 
-import javax.validation.Valid;
+    @Value("${uploadDir}") private String uploadFolder;
 
-@RestController
-public class ProductController {
+    private final ProductService productService;
 
-	@Value("${uploadDir}")
-	private String uploadFolder;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final ProductService productService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    @GetMapping("/products") public List<Product> showAllProducts() {
+        return productService.getProducts();
+    }
 
-	public ProductController(ProductService productService) {
-		this.productService = productService;
-	}
+    @ProductAnalyticsLog @GetMapping("/products/{id}") public Optional<Product> getProduct(@PathVariable Long id) {
+        Optional<Product> productOpt = productService.getProductById(id);
+        return productOpt;
+    }
 
-	@GetMapping("/products")
-	public List<Product> showAllProducts() {
-		return productService.getProducts();
-	}
+    @PostMapping("/products") public ResponseEntity<Product> saveProduct(@RequestBody @Valid ProductDTO productDTO) {
+        Product product = new Product();
+        product.setImage(productDTO.getImageStr());
+        product.setPrice(productDTO.getPrice());
+        product.setName(productDTO.getName());
+        Product savedProduct = productService.saveProduct(product);
 
-	@ProductAnalyticsLog
-	@GetMapping("/products/{id}")
-	public Optional<Product> getProduct(@PathVariable Long id) {
-		Optional<Product> productOpt = productService.getProductById(id);
-		return productOpt;
-	}
+        ResponseEntity<Product> responseEntity = new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+        return responseEntity;
+    }
 
-	@PostMapping("/products")
-	public ResponseEntity<Product> saveProduct(@RequestBody @Valid ProductDTO productDTO) {
+    @PutMapping("/products") public Optional<Product> updateProduct(@RequestBody Product newProduct) {
+        return productService.updateProduct(newProduct);
+    }
 
-		// TODO: in exception handling, also add the product dto valid data, so I can repopulate
-		// TODO: return Product only
-		Product product = new Product();
-		product.setImage(productDTO.getImageStr());
-		product.setPrice(productDTO.getPrice());
-		product.setName(productDTO.getName());
-		Product savedProduct = productService.saveProduct(product);
+    @DeleteMapping("/products/{id}") public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+    }
 
-		ResponseEntity<Product> responseEntity = new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
-		return responseEntity;
-	}
+    @GetMapping("/products/{id}/image") public byte[] downloadProductImage(@PathVariable Long id) {
+        return productService.downloadProductImage(id);
+    }
 
-	@PutMapping("/products")
-	public Optional<Product> updateProduct(@RequestBody Product newProduct) {
-		return productService.updateProduct(newProduct);
-	}
-
-	@DeleteMapping("/products/{id}")
-	public void deleteProduct(@PathVariable Long id) {
-		productService.deleteProduct(id);
-	}
-
-	@GetMapping("/products/{id}/image")
-	public byte[] downloadProductImage(@PathVariable Long id) {
-		return productService.downloadProductImage(id);
-	}
-
-	@PostMapping(path = "/products/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void uploadProductImage(@RequestParam Long id, @RequestPart(value = "file") MultipartFile file) {
-		log.debug("uploading from endpoint " + id + " " + file);
-		productService.uploadProductImage(id, file);
-	}
-
+    @PostMapping(path = "/products/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE) public void uploadProductImage(
+                    @RequestParam Long id, @RequestPart(value = "file") MultipartFile file) {
+        log.debug("uploading from endpoint " + id + " " + file);
+        productService.uploadProductImage(id, file);
+    }
 }

@@ -4,47 +4,47 @@ import java.math.BigDecimal;
 
 public class ProductDTO {
 
-	private Long id;
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private BigDecimal price;
+    private BigDecimal price;
 
-	private String imageStr;
+    private String imageStr;
 
-	public ProductDTO() {
-	}
+    public ProductDTO() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getImageStr() {
-		return imageStr;
-	}
+    public String getImageStr() {
+        return imageStr;
+    }
 
-	public void setImageStr(String imageStr) {
-		this.imageStr = imageStr;
-	}
+    public void setImageStr(String imageStr) {
+        this.imageStr = imageStr;
+    }
 
-	public BigDecimal getPrice() {
-		return price;
-	}
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
 }

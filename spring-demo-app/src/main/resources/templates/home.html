@@ -8,12 +8,9 @@
 <h2>Welcome Home!</h2>
 
 <div sec:authorize="!isAuthenticated()">
-    <a th:href="@{/user/login}">Login</a> <a
+    <a th:href="@{/login}">Login</a> <a
         th:href="@{/user/registration}">Registration</a>
 </div>
-
-<br>
-<a th:href="@{/h2-console}">H2-Console</a>
 
 <br>
 <div sec:authorize="isAuthenticated()">This content is only shown
@@ -27,9 +24,14 @@
 </div>
 <div sec:authorize="isAuthenticated()">
     <a style="margin-right: 10px" th:href="@{/products}">Products</a> <a
-        th:href="@{/products/history}">Products Purchase History</a> <br>
+        th:href="@{/products/history}">Products Purchase History</a>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/receipts/addReceipt}">Add Receipts</a>
+    </div>
+    <br>
     <hr>
     <a href="#" onclick="document.getElementById('logout-form').submit();"> Logout </a>
+
 
     <form id="logout-form" th:action="@{/logout}" method="post" enctype="utf8">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
