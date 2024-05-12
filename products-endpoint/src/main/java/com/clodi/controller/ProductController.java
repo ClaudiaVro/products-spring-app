@@ -43,8 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
     }
 
     @ProductAnalyticsLog @GetMapping("/products/{id}") public Optional<Product> getProduct(@PathVariable Long id) {
-        Optional<Product> productOpt = productService.getProductById(id);
-        return productOpt;
+        return productService.getProductById(id);
     }
 
     @PostMapping("/products") public ResponseEntity<Product> saveProduct(@RequestBody @Valid ProductDTO productDTO) {
@@ -54,8 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
         product.setName(productDTO.getName());
         Product savedProduct = productService.saveProduct(product);
 
-        ResponseEntity<Product> responseEntity = new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
-        return responseEntity;
+        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
     @PutMapping("/products") public Optional<Product> updateProduct(@RequestBody Product newProduct) {

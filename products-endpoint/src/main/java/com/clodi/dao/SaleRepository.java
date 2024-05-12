@@ -1,4 +1,4 @@
-package com.clodi.repository;
+package com.clodi.dao;
 
 import com.clodi.model.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;

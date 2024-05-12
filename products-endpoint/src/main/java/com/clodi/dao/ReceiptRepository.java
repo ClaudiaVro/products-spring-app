@@ -1,4 +1,4 @@
-package com.clodi.repository;
+package com.clodi.dao;
 
 import java.util.List;
 

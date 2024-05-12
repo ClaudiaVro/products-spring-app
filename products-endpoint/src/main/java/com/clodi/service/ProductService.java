@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import com.clodi.bucket.BucketName;
 import com.clodi.model.Product;
-import com.clodi.repository.ProductRepository;
+import com.clodi.dao.ProductRepository;
 import org.apache.http.entity.ContentType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

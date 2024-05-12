@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.clodi.model.Product;
-import com.clodi.repository.ProductRepository;
+import com.clodi.dao.ProductRepository;
 import com.clodi.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

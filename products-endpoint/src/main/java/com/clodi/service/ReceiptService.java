@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.clodi.model.ProductReceipt;
 import com.clodi.model.Sale;
-import com.clodi.repository.ReceiptRepository;
-import com.clodi.repository.SaleRepository;
+import com.clodi.dao.ReceiptRepository;
+import com.clodi.dao.SaleRepository;
 import org.springframework.stereotype.Service;
 
 @Service public class ReceiptService {
