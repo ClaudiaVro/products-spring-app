@@ -61,6 +61,9 @@ import org.springframework.web.multipart.MultipartFile;
 
     public byte[] downloadProductImage(Long id) {
         Optional<Product> productOpt = productRepository.findById(id);
+        if (productOpt.isEmpty() || productOpt.get().getImage() == null){
+            return new byte[0];
+        }
         return productOpt.map(product -> {
             String path = String.format("%s/%s", BucketName.PRODUCT_IMAGES.getBucketName(), product.getId());
             LOGGER.info(path + " " + product.getImage());

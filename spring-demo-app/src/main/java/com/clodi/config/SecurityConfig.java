@@ -20,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
         http.authorizeHttpRequests(r -> r
                         .requestMatchers("/products/history/**","/test").authenticated()
                         .anyRequest().permitAll())
-                        .formLogin(withDefaults())
+                        .formLogin(c -> c.loginPage("/login").permitAll())
                         .httpBasic(withDefaults())
                         .csrf(c -> c.disable());
         return http.build();

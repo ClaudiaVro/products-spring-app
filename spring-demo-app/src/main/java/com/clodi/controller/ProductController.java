@@ -10,6 +10,7 @@ import com.clodi.exception.ProductNotFoundException;
 import com.clodi.model.Product;
 import com.clodi.model.ProductReceipt;
 import com.clodi.proxy.ProductProxy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,10 +29,10 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 
     private static final Logger LOGGER = Logger.getLogger(ProductController.class.getName());
 
-    private final ProductProxy productProxy;
+    @Autowired
+    private ProductProxy productProxy;
 
-    public ProductController(ProductProxy productProxy) {
-        this.productProxy = productProxy;
+    public ProductController() {
     }
 
     /**
