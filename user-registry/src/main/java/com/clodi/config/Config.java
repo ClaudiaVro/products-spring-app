@@ -53,7 +53,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         javaMailSender.setPort(587);
         javaMailSender.setProtocol("smtp");
         javaMailSender.setUsername("claudiaivanovnak@gmail.com");
-        javaMailSender.setPassword("bmqrvdhmsmvaedhb");
+        javaMailSender.setPassword("");
         Properties mailProperties = new Properties();
 
         mailProperties.put("mail.smtp.auth", "true");

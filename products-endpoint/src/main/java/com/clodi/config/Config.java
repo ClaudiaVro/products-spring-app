@@ -18,7 +18,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @Configuration @EnableAspectJAutoProxy public class Config {
 
     @Bean public AmazonS3 s3() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials("AKIA4W5IWOZ73ELBSI3A", "tgcqE/uD2bdNaqUDj5wcRjesZKjxEZtzRr1WlZai");
+        AWSCredentials awsCredentials = new BasicAWSCredentials("","");
         return AmazonS3ClientBuilder.standard().withRegion(Regions.EU_CENTRAL_1).withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                         .build();
     }
