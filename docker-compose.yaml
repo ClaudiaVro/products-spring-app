@@ -1,6 +1,8 @@
 services:
   main-app:
     image: clodi485/spring-products
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
     build: ./spring-demo-app
     deploy:
       resources:
